@@ -1,4 +1,4 @@
-# Control de Inventario de Arcos · V0.6.3 (PWA)
+# Control de Inventario de Arcos · V0.6.4 (PWA)
 
 Aplicación web estática para publicar en **GitHub Pages**. Conserva las funciones
 operativas de V0.6.2 (157 materiales, arcos, inventario, reservas, pedidos con
@@ -29,7 +29,7 @@ no la carpeta contenedora ni el ZIP.
    dentro del repositorio creado; `index.html` debe quedar al mismo nivel
    que `README.md`. No copies solamente el archivo ZIP ni una subcarpeta.
 7. Regresa a GitHub Desktop. En **Changes**, verás los archivos agregados.
-8. Escribe como Summary: `PWA V0.6.3 - primera publicación`.
+8. Escribe como Summary: `PWA V0.6.4 - correcciones de botones y fecha`.
 9. Pulsa **Commit to main** y luego **Publish repository**.
 10. En **Publish repository**, elige tu cuenta y asegúrate de que el repositorio
     sea **público** si utilizas GitHub Free (desmarca “Keep this code private”).
@@ -69,6 +69,25 @@ al repositorio público.
 Reemplaza únicamente los archivos públicos de la app; en GitHub Desktop haz
 **Commit** y después **Push origin**. El navegador obtendrá la actualización
 al reconectarse y recargar. Conserva un respaldo JSON antes de cambios importantes.
+
+## Actualización V0.6.4 (24-nov-2026)
+
+- Los botones **Colapsar** e **Ir arriba** permanecen visibles debajo de la
+  barra de navegación mientras recorres una categoría abierta. Al cambiar a
+  otra categoría, solo se muestran los botones de la correspondiente.
+- El campo **Fecha** respeta las dimensiones del formulario en Safari/iPhone,
+  sin ampliar su columna fuera de la tarjeta.
+- Se conserva la compatibilidad con respaldos V0.6.0–V0.6.3, las 157 referencias,
+  el modo oscuro y el Excel con dashboard y firmas.
+- El Service Worker usa una nueva versión de caché para instalar las correcciones.
+
+**Para actualizar un repositorio ya publicado con GitHub Desktop:** reemplaza los
+archivos del repositorio por los de este ZIP, haz **Commit to main** y luego
+**Push origin**. La dirección de GitHub Pages no cambia. En iPhone, recarga la
+PWA con conexión a internet y reiníciala si mantuvo la versión anterior en caché.
+
+**Haz un respaldo completo JSON** antes de actualizar. No se deben subir datos
+personales, respaldos operativos o archivos firmados al repositorio.
 
 ## Limitaciones conocidas
 

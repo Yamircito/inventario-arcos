@@ -6,7 +6,7 @@ try{if(localStorage.getItem('inventario-tema-v1')==='light'){
  document.documentElement.setAttribute('data-theme','light');
  document.getElementById('themeColorMeta')?.setAttribute('content','#12364d');
 }}catch(_e){}
-</script><title>Control de Inventario · V0.6.3 · Gestión de arcos</title>
+</script><title>Control de Inventario · V0.6.4 · Gestión de arcos</title>
 <style>
 :root{--navy:#12364d;--teal:#147c85;--ink:#183047;--muted:#64788c;--bg:#f3f7fa;--line:#dae4eb;--white:white;--red:#b91c1c;--green:#166534;--amber:#a16207}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);line-height:1.35}
@@ -286,6 +286,37 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
 .v062-delete-msg{font-size:12px;line-height:1.5;padding:12px;border-radius:11px;border:1px solid var(--line);background:var(--bg)}
 .v062-delete-msg strong{color:var(--ink)}
 @media(max-width:610px){.v062-capture-head{align-items:stretch}.v062-capture-head .btn{width:100%}}
+/* V0.6.4 · Correcciones Safari iPhone y controles de categorías. */
+:root{--inventory-nav-height:64px}
+/* La navegación es fija al desplazar: los botones de cada categoría quedan debajo de ella,
+   pero nunca abandonan los límites de su propia sección gracias a position:sticky. */
+.category-float-tools{
+  top:calc(var(--inventory-nav-height, 64px) + 10px);
+  z-index:42;
+}
+.category-summary{
+  scroll-margin-top:calc(var(--inventory-nav-height, 64px) + 12px);
+}
+/* Evita que scrollIntoView o los anclajes oculten encabezados tras el menú. */
+/* iOS Safari tiene un ancho intrínseco para date que puede ensanchar la columna del grid.
+   minmax(0, 1fr) y min-width:0 permiten que el control nativo se reduzca correctamente. */
+.fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fields label{min-width:0;max-width:100%;display:block}
+.fields input{display:block;min-width:0;max-width:100%;box-sizing:border-box}
+.fields input[type="date"]{
+  min-width:0;max-width:100%;width:100%;-webkit-min-logical-width:0;
+  font-family:inherit;overflow:hidden;
+}
+.fields input[type="date"]::-webkit-date-and-time-value{
+  min-width:0;text-align:left;
+}
+.fields input[type="date"]::-webkit-datetime-edit{
+  min-width:0;padding:0;
+}
+.fields input[type="date"]::-webkit-calendar-picker-indicator{
+  flex:0 0 auto;margin-left:2px;margin-right:0;
+}
+@media(min-width:620px){.fields{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style><meta name="description" content="Inventario de materiales y control de arcos: asignaciones, existencias, pedidos y recepción con firmas.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
@@ -295,7 +326,7 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
 <meta name="apple-mobile-web-app-title" content="Inventario Arcos">
 <meta name="mobile-web-app-capable" content="yes">
 </head><body>
-<header><div class="wrap"><div class="header-top"><div class="eyebrow">Control de inventario · instalación · <span id="siteHeader">Sitio por definir</span> <span class="v06-version" id="v06Version">V0.6.3</span></div><button type="button" id="themeToggle" class="theme-toggle" role="switch" aria-checked="true" aria-label="Modo oscuro activado"><span class="theme-toggle-icon" aria-hidden="true">☾</span><span id="themeToggleLabel">Modo oscuro</span><span class="theme-toggle-track" aria-hidden="true"></span></button></div><h1>Checklist de materiales</h1><p>Inventario de materiales · <span id="siteSubtitle">Sitio por definir</span> · 157 referencias · 11 categorías</p></div></header>
+<header><div class="wrap"><div class="header-top"><div class="eyebrow">Control de inventario · instalación · <span id="siteHeader">Sitio por definir</span> <span class="v06-version" id="v06Version">V0.6.4</span></div><button type="button" id="themeToggle" class="theme-toggle" role="switch" aria-checked="true" aria-label="Modo oscuro activado"><span class="theme-toggle-icon" aria-hidden="true">☾</span><span id="themeToggleLabel">Modo oscuro</span><span class="theme-toggle-track" aria-hidden="true"></span></button></div><h1>Checklist de materiales</h1><p>Inventario de materiales · <span id="siteSubtitle">Sitio por definir</span> · 157 referencias · 11 categorías</p></div></header>
 <main class="wrap">
 <nav class="v06-nav" id="v06Nav" role="tablist" aria-label="Secciones del inventario">
   <button type="button" class="v06-tab selected" data-view="captura" aria-selected="true">☑ Captura de arco</button>
@@ -358,7 +389,7 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
  </div>
 </section>
 
-<footer class="small-footer">Control de Inventario V0.6.3 · Versión en desarrollo · © 2026 Yamir Cardozo · Derechos reservados</footer>
+<footer class="small-footer">Control de Inventario V0.6.4 · Versión en desarrollo · © 2026 Yamir Cardozo · Derechos reservados</footer>
 </main>
 
 <div class="sig-overlay" id="signatureDialog" hidden role="dialog" aria-modal="true" aria-labelledby="sigTitle">
@@ -422,8 +453,8 @@ try{saved=JSON.parse(localStorage.getItem(STORAGE)||localStorage.getItem(PREVIOU
 let state=migrateSavedState(saved);
 /* INVENTARIO V0.6.0 · motor de existencias, arcos y movimientos. */
 const V06_KEY='inventario-materiales-global-v0.6.0';
-const V06_VERSION='0.6.3';
-const V06_COMPATIBLE=['0.6.0','0.6.1','0.6.2','0.6.3'];
+const V06_VERSION='0.6.4';
+const V06_COMPATIBLE=['0.6.0','0.6.1','0.6.2','0.6.3','0.6.4'];
 const V06_LIMIT=6000;
 const q4=v=>Math.round((Number(v)||0)*10000)/10000;
 const pos=v=>Math.max(0,q4(v));
@@ -848,7 +879,7 @@ function importInventoryFileDialog(data,name){
  }}]);
 }
 function exportStockJSON(){
- const snapshot={format:'inventario-existencias',version:'0.6.3',fecha:new Date().toISOString(),stock:Object.fromEntries(CATALOG.map(i=>[i.id,stock(i.id)]))};
+ const snapshot={format:'inventario-existencias',version:'0.6.4',fecha:new Date().toISOString(),stock:Object.fromEntries(CATALOG.map(i=>[i.id,stock(i.id)]))};
  download('existencias_fisicas_'+today()+'.json',JSON.stringify(snapshot,null,2),'application/json;charset=utf-8');
 }
 function exportArcsCSV(){
@@ -887,7 +918,7 @@ function restoreBackup(fileText){
  engine=replacement;state=currentArc().data;save();refreshArcForm();filter='todos';$('search').value='';render();refreshV06UI();showView('captura');toast('Respaldo restaurado.');
 }
 function initV06UI(){
- $('v06Version').textContent='V0.6.3';
+ $('v06Version').textContent='V0.6.4';
  $('v06Nav').addEventListener('click',e=>{const btn=e.target.closest('[data-view]');if(btn)showView(btn.dataset.view)});
  $('v06ArcSelector').addEventListener('change',e=>{if(selectArc(e.target.value))showView('captura')});
  $('v06AutoAssign').addEventListener('click',assignExistencesDialog);
@@ -1260,7 +1291,7 @@ $('sigConfirm').addEventListener('click',()=>{
  }
 });
 
-$('btnBackup').addEventListener('click',()=>download(filename('respaldo_integral_v0_6_3','json'),JSON.stringify(engine,null,2),'application/json;charset=utf-8'));
+$('btnBackup').addEventListener('click',()=>download(filename('respaldo_integral_v0_6_4','json'),JSON.stringify(engine,null,2),'application/json;charset=utf-8'));
 $('btnRestore').addEventListener('click',()=>$('fileImport').click());
 $('fileImport').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{restoreBackup(await file.text())}catch(err){toast('No se pudo importar el respaldo: '+err.message,'bad')}finally{e.target.value=''}});
 
@@ -1293,7 +1324,29 @@ initV06UI();
 })();
 </script>
 <script>
-/* PWA V0.6.3: el Service Worker guarda únicamente recursos de la página;
+/* V0.6.4: medir la barra de navegación en cada tamaño de pantalla.
+   Los controles contextualizados siguen fijados por CSS dentro de cada categoría,
+   sin taparse con la navegación y sin escapar a otras categorías. */
+(function(){
+  const nav=document.getElementById('v06Nav');
+  if(!nav)return;
+  const update=function(){
+    const height=Math.ceil(nav.getBoundingClientRect().height);
+    if(height>0){
+      document.documentElement.style.setProperty('--inventory-nav-height',height+'px');
+    }
+  };
+  update();
+  if('ResizeObserver' in window){
+    const observer=new ResizeObserver(update);
+    observer.observe(nav);
+  }
+  window.addEventListener('resize',update,{passive:true});
+  window.addEventListener('orientationchange',update,{passive:true});
+})();
+</script>
+<script>
+/* PWA V0.6.4: el Service Worker guarda únicamente recursos de la página;
    el inventario sigue guardándose localmente en este navegador. */
 (function(){
   if (!('serviceWorker' in navigator)) return;
