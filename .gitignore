@@ -1,0 +1,11 @@
+# No publicar datos operativos, respaldos ni documentos firmados.
+.DS_Store
+Thumbs.db
+backups/
+respaldos/
+exportaciones/
+respaldo*.json
+existencias*.json
+pedido_*.xlsx
+inventario_con_dashboard*.xlsx
+*.log
