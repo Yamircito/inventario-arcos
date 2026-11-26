@@ -1,7 +1,7 @@
-/* Control de Inventario de Arcos — PWA V0.6.4
+/* Control de Inventario de Arcos — PWA V0.6.5
    Los respaldos, firmas y Excel generados NO se almacenan en esta caché.
    Se cachean únicamente los archivos estáticos publicados. */
-const CACHE_NAME = 'inventario-arcos-estaticos-v0.6.4';
+const CACHE_NAME = 'inventario-arcos-estaticos-v0.6.5';
 const PREFIX = 'inventario-arcos-estaticos-';
 const SHELL = [
   './',

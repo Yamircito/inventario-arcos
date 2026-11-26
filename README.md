@@ -1,4 +1,4 @@
-# Control de Inventario de Arcos · V0.6.4 (PWA)
+# Control de Inventario de Arcos · V0.6.5 (PWA)
 
 Aplicación web estática para publicar en **GitHub Pages**. Conserva las funciones
 operativas de V0.6.2 (157 materiales, arcos, inventario, reservas, pedidos con
@@ -29,7 +29,7 @@ no la carpeta contenedora ni el ZIP.
    dentro del repositorio creado; `index.html` debe quedar al mismo nivel
    que `README.md`. No copies solamente el archivo ZIP ni una subcarpeta.
 7. Regresa a GitHub Desktop. En **Changes**, verás los archivos agregados.
-8. Escribe como Summary: `PWA V0.6.4 - correcciones de botones y fecha`.
+8. Escribe como Summary: `PWA V0.6.5 - correcciones de botones y fecha`.
 9. Pulsa **Commit to main** y luego **Publish repository**.
 10. En **Publish repository**, elige tu cuenta y asegúrate de que el repositorio
     sea **público** si utilizas GitHub Free (desmarca “Keep this code private”).
@@ -70,7 +70,7 @@ Reemplaza únicamente los archivos públicos de la app; en GitHub Desktop haz
 **Commit** y después **Push origin**. El navegador obtendrá la actualización
 al reconectarse y recargar. Conserva un respaldo JSON antes de cambios importantes.
 
-## Actualización V0.6.4 (24-nov-2026)
+## Actualización V0.6.5 (24-nov-2026)
 
 - Los botones **Colapsar** e **Ir arriba** permanecen visibles debajo de la
   barra de navegación mientras recorres una categoría abierta. Al cambiar a
@@ -98,3 +98,20 @@ personales, respaldos operativos o archivos firmados al repositorio.
   XLSX y los dos lienzos de firma funcionen como se espera.
 - El Service Worker solo guarda archivos estáticos, no inventarios ni firmas.
 - La aplicación PWA no sustituye a un backend ni ofrece colaboración en tiempo real.
+
+## V0.6.5 — Captura directa sin bloqueos
+
+- En Captura de arco, **Tengo** acepta cantidades superiores a las existencias libres.
+- El sistema usa primero material libre, registra automáticamente la diferencia
+  como entrada física, y reserva solo hasta la cantidad de **Necesarios**.
+- Si hay sobrante, permanece disponible para los demás arcos.
+- Al reducir **Tengo**, se libera la reserva, pero no se borra el material físico.
+- Las cantidades se confirman al salir del campo o pulsar **Listo/Enter**;
+  esto evita registrar valores parciales mientras se escribe en iPhone.
+- Cuando cambias **Necesarios**, la reserva se ajusta a la nueva necesidad
+  sin inventar stock.
+- Conserva los datos locales y los respaldos V0.6.0–V0.6.4.
+
+**Haz un respaldo completo antes de publicar.** El inventario sigue almacenado
+localmente en cada dispositivo. Las entradas incorrectas se pueden corregir con
+Inventario general → Ajustar inventario, registrando el motivo.

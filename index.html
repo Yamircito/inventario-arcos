@@ -6,7 +6,7 @@ try{if(localStorage.getItem('inventario-tema-v1')==='light'){
  document.documentElement.setAttribute('data-theme','light');
  document.getElementById('themeColorMeta')?.setAttribute('content','#12364d');
 }}catch(_e){}
-</script><title>Control de Inventario · V0.6.4 · Gestión de arcos</title>
+</script><title>Control de Inventario · V0.6.5 · Gestión de arcos</title>
 <style>
 :root{--navy:#12364d;--teal:#147c85;--ink:#183047;--muted:#64788c;--bg:#f3f7fa;--line:#dae4eb;--white:white;--red:#b91c1c;--green:#166534;--amber:#a16207}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);line-height:1.35}
@@ -286,7 +286,7 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
 .v062-delete-msg{font-size:12px;line-height:1.5;padding:12px;border-radius:11px;border:1px solid var(--line);background:var(--bg)}
 .v062-delete-msg strong{color:var(--ink)}
 @media(max-width:610px){.v062-capture-head{align-items:stretch}.v062-capture-head .btn{width:100%}}
-/* V0.6.4 · Correcciones Safari iPhone y controles de categorías. */
+/* V0.6.5 · Correcciones Safari iPhone y controles de categorías. */
 :root{--inventory-nav-height:64px}
 /* La navegación es fija al desplazar: los botones de cada categoría quedan debajo de ella,
    pero nunca abandonan los límites de su propia sección gracias a position:sticky. */
@@ -317,6 +317,11 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
   flex:0 0 auto;margin-left:2px;margin-right:0;
 }
 @media(min-width:620px){.fields{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* V0.6.5 · Captura ágil: datos de referencia, sin obligar a abrir Inventario. */
+.v065-capture-help{font-size:13px;line-height:1.55;color:var(--muted);margin:12px 0 15px;padding:10px 14px;border-left:3px solid var(--teal);background:var(--white);border-radius:0 9px 9px 0}
+.v065-stock-info{margin:8px 0 6px 36px;color:var(--muted);font-size:11px;line-height:1.45}
+.v065-stock-info b{color:var(--ink);font-weight:750}
+@media(max-width:650px){.v065-stock-info{margin-left:0;font-size:10.5px}.v065-capture-help{font-size:12px}}
 </style><meta name="description" content="Inventario de materiales y control de arcos: asignaciones, existencias, pedidos y recepción con firmas.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
@@ -326,7 +331,7 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
 <meta name="apple-mobile-web-app-title" content="Inventario Arcos">
 <meta name="mobile-web-app-capable" content="yes">
 </head><body>
-<header><div class="wrap"><div class="header-top"><div class="eyebrow">Control de inventario · instalación · <span id="siteHeader">Sitio por definir</span> <span class="v06-version" id="v06Version">V0.6.4</span></div><button type="button" id="themeToggle" class="theme-toggle" role="switch" aria-checked="true" aria-label="Modo oscuro activado"><span class="theme-toggle-icon" aria-hidden="true">☾</span><span id="themeToggleLabel">Modo oscuro</span><span class="theme-toggle-track" aria-hidden="true"></span></button></div><h1>Checklist de materiales</h1><p>Inventario de materiales · <span id="siteSubtitle">Sitio por definir</span> · 157 referencias · 11 categorías</p></div></header>
+<header><div class="wrap"><div class="header-top"><div class="eyebrow">Control de inventario · instalación · <span id="siteHeader">Sitio por definir</span> <span class="v06-version" id="v06Version">V0.6.5</span></div><button type="button" id="themeToggle" class="theme-toggle" role="switch" aria-checked="true" aria-label="Modo oscuro activado"><span class="theme-toggle-icon" aria-hidden="true">☾</span><span id="themeToggleLabel">Modo oscuro</span><span class="theme-toggle-track" aria-hidden="true"></span></button></div><h1>Checklist de materiales</h1><p>Inventario de materiales · <span id="siteSubtitle">Sitio por definir</span> · 157 referencias · 11 categorías</p></div></header>
 <main class="wrap">
 <nav class="v06-nav" id="v06Nav" role="tablist" aria-label="Secciones del inventario">
   <button type="button" class="v06-tab selected" data-view="captura" aria-selected="true">☑ Captura de arco</button>
@@ -349,11 +354,12 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
  <div id="downloadReady" class="download-ready" hidden><strong id="readyTitle">Archivo preparado.</strong> Si no aparece en Descargas, <a id="downloadLink" href="#" download>descárgalo desde aquí</a>.</div>
  <p class="note">Al generar un <strong>Pedido firmado</strong>, esa solicitud queda protegida contra eliminación. El <strong>Pedido</strong> solicita los nombres y firmas de quien entrega y de quien recibe. Se conserva el Excel con <strong>Resumen y Checklist</strong>. Los respaldos y reportes de inventario están en la nueva sección <strong>Respaldos</strong>.</p></section>
 <section class="panel"><h2 class="section-label">Buscar y filtrar</h2><div class="filterbar"><input type="search" id="search" placeholder="Buscar material, MAT-XXX, modelo, medida o categoría..." aria-label="Buscar materiales"></div><div class="tabs" id="tabs"><button class="chip active" data-filter="todos">Todos</button><button class="chip" data-filter="comprar">Por comprar</button><button class="chip" data-filter="sin-contar">Sin contar</button><button class="chip" data-filter="revisados">Revisados</button><button class="chip" data-filter="completos">Completos</button></div><p class="note" id="showing" aria-live="polite"></p><div class="category-actions"><button class="btn category-action" type="button" id="openAll">Expandir todas</button><button class="btn category-action" type="button" id="closeAll">Colapsar todas</button></div></section>
+<p class="v065-capture-help">Captura en <strong>Tengo</strong> la cantidad total que tendrás para ese arco (si tenías 4 y recibes 3, escribe 7). La página usa primero las existencias libres y agrega automáticamente la diferencia al inventario general. Si recibes más de lo necesario, el excedente queda libre. <strong>No necesitas abrir otro formulario.</strong></p>
 <div id="items" class="category-list"></div>
 </div><!-- Fin de capturaView -->
 <section id="inventarioView" hidden>
  <div class="panel"><h2 class="v06-panel-title">Inventario físico general</h2>
-  <p class="v06-muted">Existencia física: todo el material bajo control. Reservado: material asignado a arcos activos. Disponible: existencia física menos reservas. No sumamos piezas, metros y unidades diferentes en un solo total.</p>
+  <p class="v06-muted">Existencia física: todo el material bajo control. Reservado: material asignado a arcos activos. Disponible: existencia física menos reservas. No sumamos piezas, metros y unidades diferentes en un solo total. En Captura de arco puedes registrar directamente las cantidades recibidas; las nuevas entradas se suman automáticamente aquí.</p>
   <div class="v06-kpi-grid"><div><strong id="v06StockRefs">0</strong><span>Referencias con existencia</span></div><div><strong id="v06ReservedRefs">0</strong><span>Referencias reservadas</span></div><div><strong id="v06AvailableRefs">0</strong><span>Referencias disponibles</span></div></div>
   <div class="v06-actions"><button class="btn primary" id="v06AddStock">+ Agregar materiales</button><button class="btn" id="v06ImportInventory">↑ Importar existencias</button><button class="btn" id="v06AutoAssign">↪ Asignar existencias</button><button class="btn" id="v06Recount">≋ Ajustar inventario</button></div>
   <input type="file" id="v06InventoryFile" accept=".csv,.json,text/csv,application/json" hidden>
@@ -389,7 +395,7 @@ html[data-theme="dark"] .v062-doc-info.signed{color:#86e5b7}
  </div>
 </section>
 
-<footer class="small-footer">Control de Inventario V0.6.4 · Versión en desarrollo · © 2026 Yamir Cardozo · Derechos reservados</footer>
+<footer class="small-footer">Control de Inventario V0.6.5 · Versión en desarrollo · © 2026 Yamir Cardozo · Derechos reservados</footer>
 </main>
 
 <div class="sig-overlay" id="signatureDialog" hidden role="dialog" aria-modal="true" aria-labelledby="sigTitle">
@@ -453,8 +459,8 @@ try{saved=JSON.parse(localStorage.getItem(STORAGE)||localStorage.getItem(PREVIOU
 let state=migrateSavedState(saved);
 /* INVENTARIO V0.6.0 · motor de existencias, arcos y movimientos. */
 const V06_KEY='inventario-materiales-global-v0.6.0';
-const V06_VERSION='0.6.4';
-const V06_COMPATIBLE=['0.6.0','0.6.1','0.6.2','0.6.3','0.6.4'];
+const V06_VERSION='0.6.5';
+const V06_COMPATIBLE=['0.6.0','0.6.1','0.6.2','0.6.3','0.6.4','0.6.5'];
 const V06_LIMIT=6000;
 const q4=v=>Math.round((Number(v)||0)*10000)/10000;
 const pos=v=>Math.max(0,q4(v));
@@ -519,6 +525,21 @@ function addStock(id,amount,reason,arcId=''){
    const material=CATALOG.find(i=>i.id===id);const due=material?pos(arcTarget(arc,material)-assigned(id,arc)):0;
    if(due>0)assignQty(arc,id,q4(assigned(id,arc)+Math.min(amount,due)),'Asignación tras entrada');
  }}
+}
+/* V0.6.5 · Captura directa de material. Nunca bloquea el conteo por no haber
+   stock previo: usa existencias libres, registra el faltante como nueva entrada
+   física y reserva únicamente lo necesario para el arco. Una edición a la baja
+   libera la reserva y no borra material físico de otros arcos. */
+function receiveFromChecklist(arc,item,entered){
+ if(!arc||arc.status!=='activo')return {ok:false,error:'Selecciona un arco activo.'};
+ if(!Number.isFinite(Number(entered))||Number(entered)<0)return {ok:false,error:'Introduce una cantidad válida.'};
+ const id=item.id,qty=pos(entered),previous=assigned(id,arc);
+ const capacity=q4(previous+freeStock(id));
+ const incoming=q4(Math.max(0,qty-capacity));
+ const reserved=q4(Math.min(qty,arcTarget(arc,item)));
+ if(incoming>0)addStock(id,incoming,'Entrada automática desde captura de '+(arc.data.site||arc.id),arc.id);
+ const result=assignQty(arc,id,reserved,'Captura directa de '+(arc.data.site||arc.id));
+ return {...result,received:incoming,reserved,extra:q4(Math.max(0,qty-reserved)),physical:stock(id),free:freeStock(id)};
 }
 function newArc(name,auto=true){
  const clean=String(name||'').trim();if(!clean)throw Error('Indica el nombre del arco o sitio.');
@@ -586,7 +607,7 @@ function refreshAlert(){
  const banner=$('v06Banner');if(!banner)return;
  const arc=currentArc(),missing=arcShortages(arc);
  if(arc.status!=='activo'||!missing.length||dismissedAlertFor.has(arc.id)){banner.hidden=true;return;}
- banner.hidden=false;$('v06AlertText').textContent=`${missing.length} materiales no cubren la cantidad necesaria para ${arc.data.site||'este arco'}. Puedes seguir capturando o registrar una entrada.`;
+ banner.hidden=false;$('v06AlertText').textContent=`${missing.length} materiales no cubren la cantidad necesaria para ${arc.data.site||'este arco'}. Captura directamente la cantidad recibida en «Tengo» para completar lo faltante.`;
 }
 function toast(text,type='info'){
  const n=$('v06Toast');n.textContent=text;n.hidden=false;n.className='v06-toast '+(type==='bad'?'v06-toast-error':'');
@@ -879,7 +900,7 @@ function importInventoryFileDialog(data,name){
  }}]);
 }
 function exportStockJSON(){
- const snapshot={format:'inventario-existencias',version:'0.6.4',fecha:new Date().toISOString(),stock:Object.fromEntries(CATALOG.map(i=>[i.id,stock(i.id)]))};
+ const snapshot={format:'inventario-existencias',version:'0.6.5',fecha:new Date().toISOString(),stock:Object.fromEntries(CATALOG.map(i=>[i.id,stock(i.id)]))};
  download('existencias_fisicas_'+today()+'.json',JSON.stringify(snapshot,null,2),'application/json;charset=utf-8');
 }
 function exportArcsCSV(){
@@ -918,7 +939,7 @@ function restoreBackup(fileText){
  engine=replacement;state=currentArc().data;save();refreshArcForm();filter='todos';$('search').value='';render();refreshV06UI();showView('captura');toast('Respaldo restaurado.');
 }
 function initV06UI(){
- $('v06Version').textContent='V0.6.4';
+ $('v06Version').textContent='V0.6.5';
  $('v06Nav').addEventListener('click',e=>{const btn=e.target.closest('[data-view]');if(btn)showView(btn.dataset.view)});
  $('v06ArcSelector').addEventListener('change',e=>{if(selectArc(e.target.value))showView('captura')});
  $('v06AutoAssign').addEventListener('click',assignExistencesDialog);
@@ -976,9 +997,10 @@ function itemHTML(i){
     <div class="meta">${i.model?`<span class="tag"><strong>Modelo:</strong> ${esc(i.model)}</span>`:''}${i.measure?`<span class="tag">${esc(i.measure)}</span>`:''}<span>${esc(i.unit)}</span><span>${esc(i.id)}</span></div>
     <div class="controls">
       <div class="control"><label>Necesarios<input type="number" min="0" step="any" inputmode="decimal" data-field="target" placeholder="${target(i)===null?'Definir':''}" value="${esc(target(i)===null?'':target(i))}"></label></div>
-      <div class="control"><label>Tengo · asignado<input type="number" min="0" step="any" inputmode="decimal" data-field="have" placeholder="—" value="${esc(has?r.have:'')}"></label></div>
+      <div class="control"><label>Tengo · para el arco<input type="number" min="0" step="any" inputmode="decimal" data-field="have" placeholder="—" value="${esc(has?r.have:'')}"></label></div>
       <div class="control"><label>Faltan<div class="out ${missing>0?'needed':''}">${numberFmt(missing)}</div></label></div>
     </div>
+    <div class="v065-stock-info" aria-live="polite">Inventario físico: <b data-stock-fisico>${numberFmt(stock(i.id))}</b> ${esc(i.unit)} · libre para otros arcos: <b data-stock-libre>${numberFmt(freeStock(i.id))}</b> ${esc(i.unit)}</div>
     <details ${r.note?'open':''}><summary>Observaciones${r.note?' · con nota':''}</summary><textarea rows="2" data-field="note" placeholder="Observaciones, cambios o material dañado...">${esc(r.note||'')}</textarea></details>
   </article>`;
 }
@@ -1047,16 +1069,70 @@ $('items').addEventListener('click',event=>{
 });
 $('openAll').addEventListener('click',()=>setAllCategories(true));
 $('closeAll').addEventListener('click',()=>setAllCategories(false));
-function refreshCard(card,i){let s=status(i),badge=card.querySelector('.item-status'),out=card.querySelector('.out');badge.className=`item-status status-${s}`;badge.textContent=statusText(s);out.textContent=numberFmt(shortage(i));out.classList.toggle('needed',shortage(i)>0)}
-$('items').addEventListener('input',e=>{const fld=e.target.dataset.field;if(!fld||fld==='checked')return;const card=e.target.closest('.item');if(!card)return;const i=CATALOG.find(x=>x.id===card.dataset.id),r=record(i.id);if(fld==='note'){r.note=e.target.value}
- else if(fld==='have'){
-  const raw=e.target.value,old=assigned(i.id);if(raw!==''&&(!Number.isFinite(Number(raw))||Number(raw)<0)){e.target.value=old;toast('Introduce una cantidad válida.','bad');return}
-  const wanted=raw===''?0:pos(raw);const result=assignQty(currentArc(),i.id,wanted,'Captura de material para el arco');
-  if(!result.ok){e.target.value=old;toast(result.error,'bad');return}
-  if(raw==='')r.have='';
- }else if(fld==='target'){r.target=e.target.value===''?'':Math.max(0,Number(e.target.value))}
- save();if(fld!=='note'){refreshCard(card,i);updateSummary();refreshV06UI()}});
-$('items').addEventListener('change',e=>{let fld=e.target.dataset.field;if(!fld)return;let card=e.target.closest('.item');if(!card)return;let i=CATALOG.find(x=>x.id===card.dataset.id),r=record(i.id);if(fld==='checked'){r.checked=e.target.checked;card.classList.toggle('done',r.checked)}save();if(filter!=='todos')render();else updateSummary()});
+function refreshCard(card,i){
+ let s=status(i),badge=card.querySelector('.item-status'),out=card.querySelector('.out');
+ badge.className=`item-status status-${s}`;badge.textContent=statusText(s);
+ out.textContent=numberFmt(shortage(i));out.classList.toggle('needed',shortage(i)>0);
+ const physical=card.querySelector('[data-stock-fisico]'),free=card.querySelector('[data-stock-libre]');
+ if(physical)physical.textContent=numberFmt(stock(i.id));if(free)free.textContent=numberFmt(freeStock(i.id));
+}
+
+/* Durante la escritura solo previsualizamos el faltante. La entrada física se
+   registra al confirmar la cifra (change / Done del teclado iOS), evitando que
+   los valores intermedios de una cifra se cuenten como entradas reales. */
+$('items').addEventListener('input',e=>{
+ const field=e.target.dataset.field;if(!field||field==='checked')return;
+ const card=e.target.closest('.item');if(!card)return;
+ const item=itemMap().get(card.dataset.id);if(!item)return;
+ if(field==='note'){record(item.id).note=e.target.value;save();return;}
+ if(field==='have'||field==='target'){
+  const raw=e.target.value;
+  const nextNeed=field==='target'?(raw===''?item.quantity:Number(raw)):target(item);
+  const nextHave=field==='have'?(raw===''?null:Number(raw)):have(item);
+  const out=card.querySelector('.out');
+  if(Number.isFinite(nextNeed)&&nextHave!==null&&Number.isFinite(nextHave)&&nextHave>=0){
+    const n=q4(Math.max(0,nextNeed-Math.min(nextHave,nextNeed)));out.textContent=numberFmt(n);out.classList.toggle('needed',n>0);
+  }else{out.textContent='—';out.classList.remove('needed');}
+ }
+});
+$('items').addEventListener('change',e=>{
+ const field=e.target.dataset.field;if(!field)return;
+ const card=e.target.closest('.item');if(!card)return;
+ const item=itemMap().get(card.dataset.id);if(!item)return;
+ const r=record(item.id),arc=currentArc();
+ if(field==='checked'){
+   r.checked=e.target.checked;card.classList.toggle('done',r.checked);
+ }else if(field==='have'){
+   const raw=e.target.value.trim();
+   if(raw===''){
+     const result=assignQty(arc,item.id,0,'Liberación desde captura');
+     if(!result.ok){toast(result.error,'bad');e.target.value=numberFmt(assigned(item.id,arc));return;}
+     r.have='';
+   }else{
+     const number=Number(raw);
+     if(!Number.isFinite(number)||number<0){e.target.value=r.have??'';toast('Indica una cantidad válida.','bad');return;}
+     const result=receiveFromChecklist(arc,item,number);
+     if(!result.ok){e.target.value=r.have??'';toast(result.error,'bad');return;}
+     e.target.value=String(result.reserved);
+     if(result.received>0)toast(`Se agregaron ${numberFmt(result.received)} ${item.unit} de ${item.description} al inventario. ${numberFmt(result.reserved)} asignados a este arco${result.extra>0?`; ${numberFmt(result.extra)} quedan libres`:''}.`);
+     else if(result.extra>0)toast(`Este arco necesita ${numberFmt(result.reserved)} ${item.unit}; las existencias sobrantes permanecen libres.`);
+   }
+ }else if(field==='target'){
+   const raw=e.target.value.trim(),newTarget=raw===''?item.quantity:Number(raw);
+   if(!Number.isFinite(newTarget)||newTarget<0){e.target.value=String(target(item));toast('Indica una cantidad necesaria válida.','bad');return;}
+   r.target=raw===''?'':pos(newTarget);
+   const allowed=Math.min(arcTarget(arc,item),q4(assigned(item.id,arc)+freeStock(item.id)));
+   const result=assignQty(arc,item.id,allowed,'Reajuste de reserva por cantidad necesaria');
+   if(!result.ok){toast(result.error,'bad');return;}
+   const haveField=card.querySelector('[data-field="have"]');if(haveField&&counted(item))haveField.value=String(r.have);
+ }else if(field==='note'){r.note=e.target.value;}
+ save();refreshCard(card,item);
+ if(filter!=='todos'&&field!=='note')render();else updateSummary();
+ refreshV06UI();
+});
+$('items').addEventListener('keydown',e=>{
+ if(e.key==='Enter'&&e.target.matches('input[data-field="have"],input[data-field="target"]'))e.target.blur();
+});
 $('search').addEventListener('input',render);
 $('tabs').addEventListener('click',e=>{let b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.filter===filter));render()});
 for(const [id,key] of [['metaSitio','site'],['metaFecha','date'],['metaEntrega','entrega'],['metaRecibe','recibe']]){$(id).value=state[key]||'';$(id).addEventListener('input',e=>{state[key]=e.target.value;save();if(key==='site'){updateSiteHeader();refreshV06UI()}})}
@@ -1324,7 +1400,7 @@ initV06UI();
 })();
 </script>
 <script>
-/* V0.6.4: medir la barra de navegación en cada tamaño de pantalla.
+/* V0.6.5: medir la barra de navegación en cada tamaño de pantalla.
    Los controles contextualizados siguen fijados por CSS dentro de cada categoría,
    sin taparse con la navegación y sin escapar a otras categorías. */
 (function(){
@@ -1346,7 +1422,7 @@ initV06UI();
 })();
 </script>
 <script>
-/* PWA V0.6.4: el Service Worker guarda únicamente recursos de la página;
+/* PWA V0.6.5: el Service Worker guarda únicamente recursos de la página;
    el inventario sigue guardándose localmente en este navegador. */
 (function(){
   if (!('serviceWorker' in navigator)) return;
